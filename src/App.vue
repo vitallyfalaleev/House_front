@@ -13,8 +13,8 @@
       </v-btn>
       <v-btn
         text
-        to="/signup">
-        <span class="mr-2">signin</span>
+        @click="logout">
+        <span class="mr-2">Logout</span>
       </v-btn>
     </v-app-bar>
 
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  const axios = require('axios');
 export default {
   name: 'App',
   components: {
@@ -32,5 +33,11 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    logout(){
+      axios
+              .delete('http://localhost:3000/logout')
+    }
+  }
 };
 </script>
