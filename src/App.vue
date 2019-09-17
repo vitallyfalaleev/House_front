@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
+      <v-toolbar-title onclick="" class="headline text-uppercase">
         <span>Vuetify</span>
         <span class="font-weight-light">MATERIAL DESIGN</span>
       </v-toolbar-title>
@@ -35,8 +35,7 @@ export default {
   }),
   methods: {
     logout(){
-      axios
-              .delete('http://localhost:3000/logout')
+      axios.delete('http://localhost:3000/logout')
     }
   }
 };

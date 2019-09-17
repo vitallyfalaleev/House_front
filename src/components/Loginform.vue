@@ -1,77 +1,78 @@
 <template>
-    <div>
-        <transition name="fade">
-            <v-alert type="error" v-if="error">{{error}}</v-alert>
-            <v-alert type="error" v-if="errors">
-                <div v-for="(error, key) in errors"><span style="text-transform: capitalize">{{key}}</span> -  {{error[0]}}</div>
-            </v-alert>
-        </transition>
+  <div>
+    <transition name="fade">
+      <v-alert type="error" v-if="error">{{error}}</v-alert>
+      <v-alert type="error" v-if="errors">
+        <div v-for="(error, key) in errors"><span style="text-transform: capitalize">{{key}}</span> -  {{error[0]}}</div>
+      </v-alert>
+    </transition>
 
-        <v-row>
-            <v-col :md="6">
-                <v-card>
-                    <v-card-title>Log In</v-card-title>
-                    <v-card-text>
-                        <v-form @submit.prevent="login">
-                            <v-text-field
-                                    v-model="log_email"
-                                    :rules="emailRules"
-                                    label="E-mail"
-                                    required
-                            ></v-text-field>
-                            <v-text-field
-                                    v-model="log_password"
-                                    label="Password"
-                                    type="password"
-                                    :rules="passwordRules"
-                                    required
-                            ></v-text-field>
-                            <v-btn
-                                    color="success"
-                                    medium
-                                    disabled="this.loginBlank()"
-                                    type="submit" >submit</v-btn>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col :md="6">
-                <v-card>
-                    <v-card-title>Registration</v-card-title>
-                    <v-card-text>
-                        <v-form @submit.prevent="register">
-                            <v-text-field
-                                    v-model="email"
-                                    :rules="emailRules"
-                                    label="E-mail"
-                                    required
-                            ></v-text-field>
-                            <v-text-field
-                                    v-model="password"
-                                    label="Password"
-                                    type="password"
-                                    :rules="passwordRules"
-                                    required
-                            ></v-text-field>
-                            <v-text-field
-                                    v-model="password_confirmation"
-                                    label="Password confirmation"
-                                    type="password"
-                                    :rules="passwordRules"
-                                    required
-                            ></v-text-field>
-                            <v-btn
-                                    color="success"
-                                    medium
-                                    disabled="this.loginBlank()"
-                                    type="submit" >submit</v-btn>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-    </div>
+    <v-row>
+      <v-col :md="6">
+        <v-card>
+          <v-card-title>Log In</v-card-title>
+          <v-card-text>
+            <v-form @submit.prevent="login">
+              <v-text-field
+                      v-model="log_email"
+                      :rules="emailRules"
+                      label="E-mail"
+                      required
+              ></v-text-field>
+              <v-text-field
+                      v-model="log_password"
+                      label="Password"
+                      type="password"
+                      :rules="passwordRules"
+                      required
+              ></v-text-field>
+              <v-btn
+                      color="success"
+                      medium
+                      disabled="this.loginBlank()"
+                      type="submit" >submit</v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col :md="6">
+        <v-card>
+          <v-card-title>Registration</v-card-title>
+          <v-card-text>
+            <v-form @submit.prevent="register">
+              <v-text-field
+                      v-model="email"
+                      :rules="emailRules"
+                      label="E-mail"
+                      required
+              ></v-text-field>
+              <v-text-field
+                      v-model="password"
+                      label="Password"
+                      type="password"
+                      :rules="passwordRules"
+                      required
+              ></v-text-field>
+              <v-text-field
+                      v-model="password_confirmation"
+                      label="Password confirmation"
+                      type="password"
+                      :rules="passwordRules"
+                      required
+              ></v-text-field>
+              <v-btn
+                      color="success"
+                      medium
+                      disabled="this.loginBlank()"
+                      type="submit" >submit</v-btn>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
 </template>
+
 <script>
     const axios = require('axios');
     export default {
@@ -146,29 +147,24 @@
                 else{
                     return true
                 }
-
             },
             loginBlank (){
-                if (this.log_email !== '' && this.log_password !== ''){
-                    return false
-                }
-                else{
-                    return true
-                }
+                return (this.log_email !== '' && this.log_password !== '')
             }
         }
     }
 </script>
+
 <style scoped lang="scss">
-    .slide-fade-enter-active {
-        transition: all .3s ease;
-    }
-    .slide-fade-leave-active {
-        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-    }
-    .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active до версии 2.1.8 */ {
-        transform: translateX(10px);
-        opacity: 0;
-    }
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active до версии 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
+  }
 </style>
