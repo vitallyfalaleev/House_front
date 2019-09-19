@@ -12,11 +12,16 @@ export default new Vuex.Store({
     token: localStorage.getItem('user-token') || '',
     current_user: localStorage.getItem('current_user') || [],
     users: '',
+    user: [],
     status: ''
   },
   mutations: {
     FETCH_USERS(state, data){
       state.users = data
+    },
+    SHOW_USERS(state, data){
+
+      state.user = JSON.stringify(data)
     },
     GET_AUTH(state, data){
       state.authorization = data
@@ -49,6 +54,20 @@ export default new Vuex.Store({
           )
           .catch(error => {console.log(error)})
     },
+    showUser({commit}, {data}){
+      axios
+          .get(BASE_URL + '/users/' + data.id,
+              {
+                headers: {
+                  authorization: this.state.token || this.state.token
+                }
+              })
+          .then((response) => {
+                commit("SHOW_USERS", response.data)
+              }
+          )
+          .catch(error => {console.log(error)})
+    },
     getUserAuthorization({commit}, {data}){
       commit("GET_AUTH", data)
     },
@@ -72,6 +91,14 @@ export default new Vuex.Store({
   getters: {
     users: state => {
       return state.users;
+    },
+    user: state => {
+      if (typeof(state.user) === 'string'){
+        return JSON.parse(state.user)
+      }
+      else{
+        return state.user
+      }
     },
     isAuthenticated: state => !!state.token,
     status: state => {

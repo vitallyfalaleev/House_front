@@ -21,9 +21,9 @@
       </v-btn>
       <v-btn
           text
-          to='/profile'
+          :to="/profile/ + current_user.id"
           v-if="isLogin">
-        <span class="mr-2">profile</span>
+        <span class="mr-2">{{current_user.id}} profile</span>
       </v-btn>
       <v-btn
           text
@@ -52,7 +52,7 @@
             logout(){
                 axios.delete('http://localhost:3000/logout')
                     .then(localStorage.clear())
-                    .then(this.$router.go())
+                    .then(this.$router.go('/'))
             }
         },
         computed: {

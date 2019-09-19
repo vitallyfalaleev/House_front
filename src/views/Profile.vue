@@ -1,6 +1,13 @@
 <template>
   <v-container>
-    1
+    <v-row>
+      <v-col :md="6">
+        {{user.email}}
+      </v-col>
+      <v-col :md="6">
+        {{user.email}}
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -8,5 +15,13 @@
     export default {
         components: {
         },
+        created() {
+            this.$store.dispatch("showUser", {data: {id: this.$route.params.id}})
+        },
+        computed: {
+            user(){
+                return this.$store.getters.user
+            }
+        }
     };
 </script>

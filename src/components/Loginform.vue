@@ -120,7 +120,7 @@
                         }
                     }
                 )
-                    .then(response => this.loginSuccess(response)
+                    .then(response => this.registrationSuccess(response)
                     )
                     .catch(error => this.loginFailed(error))
             },
@@ -133,6 +133,12 @@
                         this.loginSuccess(this.status)
                     }, 300)
                 }
+            },
+            registrationSuccess(){
+                this.$store.dispatch("createSession", {user: {email: this.email, password: this.password}}).then(() => {
+                    console.log(this.status)
+                    this.loginSuccess(this.status)
+                })
             },
             loginFailed (error) {
                 if(typeof error.response.data === "string"){
