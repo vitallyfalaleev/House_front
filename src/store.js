@@ -9,25 +9,26 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLogin: localStorage.getItem('user-login') || false,
-    users: '',
     token: localStorage.getItem('user-token') || '',
-    status: '',
+    current_user: localStorage.getItem('current_user') || [],
+    users: '',
+    status: ''
   },
   mutations: {
     FETCH_USERS(state, data){
       state.users = data
     },
-
     GET_AUTH(state, data){
       state.authorization = data
     },
     AUTH_REQUEST(state) {
       state.status = 'loading'
     },
-    AUTH_SUCCESS(state, token) {
-      state.status = 'success'
-      state.isLogin = true
-      state.token = token
+    AUTH_SUCCESS(state, {data}) {
+      state.status = 'success';
+      state.isLogin = true;
+      state.token = data.token;
+      state.current_user = data.user;
     },
     AUTH_ERROR(state) {
       state.status = 'error'
@@ -56,10 +57,11 @@ export default new Vuex.Store({
       axios
           .post(BASE_URL + '/login',{user})
           .then(response => {
-            const token = response.headers.authorization
-            localStorage.setItem('user-token', token)
-            localStorage.setItem('user-login', true)
-            commit("AUTH_SUCCESS", token)
+            const token = response.headers.authorization;
+            localStorage.setItem('user-token', token);
+            localStorage.setItem('user-login', true);
+            localStorage.setItem('current_user', JSON.stringify(response.data));
+            commit("AUTH_SUCCESS", {data: {token: token, user: response.data}})
           })
           .catch(error => {
             commit("AUTH_ERROR", error)
@@ -77,6 +79,14 @@ export default new Vuex.Store({
     },
     isLogin: state => {
       return state.isLogin
+    },
+    current_user: state => {
+      if (typeof(state.current_user) === 'string'){
+        return JSON.parse(state.current_user)
+      }
+      else{
+        return state.current_user
+      }
     }
   }
 })

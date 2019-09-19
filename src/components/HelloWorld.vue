@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <div v-for="user in users">{{user.email}}</div>
 <!--    <v-layout-->
 <!--            text-center-->
 <!--            wrap-->

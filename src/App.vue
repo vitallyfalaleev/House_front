@@ -1,21 +1,34 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title onclick="" class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+    <v-app-bar app
+               absolute
+               color="white"
+               elevate-on-scroll>
+      <v-toolbar-title  class="headline text-uppercase">
+        <span class="font-weight-light">House Keaper</span>
       </v-toolbar-title>
+      <v-btn
+          text
+          to="/">
+        <span>Home</span>
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn
-        text
-        to="/login"
-        v-if="!isLogin">
-        <span class="mr-2">Login</span>
+          text
+          to="/login"
+          v-if="!isLogin">
+        <span>Login</span>
       </v-btn>
       <v-btn
-        text
-        @click="logout"
-        v-if="isLogin">
+          text
+          to='/profile'
+          v-if="isLogin">
+        <span class="mr-2">profile</span>
+      </v-btn>
+      <v-btn
+          text
+          @click="logout"
+          v-if="isLogin">
         <span class="mr-2">Logout</span>
       </v-btn>
     </v-app-bar>
@@ -27,25 +40,28 @@
 </template>
 
 <script>
-  const axios = require('axios');
-export default {
-  name: 'App',
-  components: {
-  },
-  data: () => ({
-    //
-  }),
-  methods: {
-    logout(){
-      axios.delete('http://localhost:3000/logout')
-          .then(localStorage.clear())
-          .then(this.$router.go())
-    }
-  },
-    computed: {
-        isLogin(){
-            return this.$store.getters.isLogin
+    const axios = require('axios');
+    export default {
+        name: 'App',
+        components: {
+        },
+        data: () => ({
+            //
+        }),
+        methods: {
+            logout(){
+                axios.delete('http://localhost:3000/logout')
+                    .then(localStorage.clear())
+                    .then(this.$router.go())
+            }
+        },
+        computed: {
+            isLogin(){
+                return this.$store.getters.isLogin
+            },
+            current_user(){
+                return this.$store.getters.current_user
+            }
         }
-    }
-};
+    };
 </script>
