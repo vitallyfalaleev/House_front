@@ -143,7 +143,6 @@
             this.$store.dispatch("fetchUsers", {self: this})
         },
         methods:{
-
         },
         computed: {
             users(){

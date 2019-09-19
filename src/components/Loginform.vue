@@ -7,66 +7,74 @@
       </v-alert>
     </transition>
 
-    <v-row>
-      <v-col :md="6">
-        <v-card>
-          <v-card-title>Log In</v-card-title>
-          <v-card-text>
-            <v-form @submit.prevent="login">
-              <v-text-field
+    <v-row
+
+        style="height: 300px;"
+        align="center"
+        justify="center">
+      <v-col :md="5">
+        <v-card height="350px">
+          <v-tabs :grow="true">
+            <v-tabs-slider></v-tabs-slider>
+            <v-tab key="login">Login</v-tab>
+            <v-tab key="registration">Registration</v-tab>
+            <v-tab-item key="login">
+              <v-card-text>
+                <v-form @submit.prevent="login">
+                  <v-text-field
                       v-model="log_email"
                       :rules="emailRules"
                       label="E-mail"
                       required
-              ></v-text-field>
-              <v-text-field
+                  ></v-text-field>
+                  <v-text-field
                       v-model="log_password"
                       label="Password"
                       type="password"
                       :rules="passwordRules"
                       required
-              ></v-text-field>
-              <v-btn
+                  ></v-text-field>
+                  <v-btn
                       color="success"
                       medium
-                      disabled="this.loginBlank()"
+                      :disabled="this.loginBlank()"
+                      :loading="this.status === 'loading' ? true : false"
                       type="submit" >submit</v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col :md="6">
-        <v-card>
-          <v-card-title>Registration</v-card-title>
-          <v-card-text>
-            <v-form @submit.prevent="register">
-              <v-text-field
+                </v-form>
+              </v-card-text>
+            </v-tab-item>
+            <v-tab-item key="registration">
+              <v-card-text>
+                <v-form @submit.prevent="register">
+                  <v-text-field
                       v-model="email"
                       :rules="emailRules"
                       label="E-mail"
                       required
-              ></v-text-field>
-              <v-text-field
+                  ></v-text-field>
+                  <v-text-field
                       v-model="password"
                       label="Password"
                       type="password"
                       :rules="passwordRules"
                       required
-              ></v-text-field>
-              <v-text-field
+                  ></v-text-field>
+                  <v-text-field
                       v-model="password_confirmation"
                       label="Password confirmation"
                       type="password"
                       :rules="passwordRules"
                       required
-              ></v-text-field>
-              <v-btn
+                  ></v-text-field>
+                  <v-btn
                       color="success"
                       medium
-                      disabled="this.loginBlank()"
+                      :disabled="this.registrationBlank()"
                       type="submit" >submit</v-btn>
-            </v-form>
-          </v-card-text>
+                </v-form>
+              </v-card-text>
+            </v-tab-item>
+          </v-tabs>
         </v-card>
       </v-col>
     </v-row>
@@ -97,18 +105,10 @@
         },
         methods: {
             login () {
-                axios
-                    .post('http://localhost:3000/login',
-                        {
-                            user: {
-                                email: this.log_email,
-                                password: this.log_password
-                            }
-                        }
-                    )
-                    .then(response => this.loginSuccess(response)
-                    )
-                    .catch(error => this.loginFailed(error))
+                this.$store.dispatch("createSession", {user: {email: this.log_email, password: this.log_password}}).then(() => {
+                    console.log(this.status)
+                    this.loginSuccess(this.status)
+                })
             },
             register () {
                 axios.post('http://localhost:3000/signup',
@@ -124,8 +124,15 @@
                     )
                     .catch(error => this.loginFailed(error))
             },
-            loginSuccess (response) {
-                this.$router.replace('/')
+            loginSuccess(state){
+                if (state === "success") {
+                    this.$router.push('/')
+                }
+                else{
+                    setTimeout(()=>{
+                        this.loginSuccess(this.status)
+                    }, 300)
+                }
             },
             loginFailed (error) {
                 if(typeof error.response.data === "string"){
@@ -141,15 +148,15 @@
                 }
             },
             registrationBlank (){
-                if (this.password !== '' && this.password_confirmation !== ''){
-                    return false
-                }
-                else{
-                    return true
-                }
+                return !(this.password !== '' && this.password_confirmation !== '')
             },
             loginBlank (){
-                return (this.log_email !== '' && this.log_password !== '')
+                return !(this.log_email !== '' && this.log_password !== '')
+            }
+        },
+        computed: {
+            status(){
+                return this.$store.getters.status
             }
         }
     }

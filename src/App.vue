@@ -8,12 +8,14 @@
       <v-spacer></v-spacer>
       <v-btn
         text
-        to="/login">
+        to="/login"
+        v-if="!isLogin">
         <span class="mr-2">Login</span>
       </v-btn>
       <v-btn
         text
-        @click="logout">
+        @click="logout"
+        v-if="isLogin">
         <span class="mr-2">Logout</span>
       </v-btn>
     </v-app-bar>
@@ -36,7 +38,14 @@ export default {
   methods: {
     logout(){
       axios.delete('http://localhost:3000/logout')
+          .then(localStorage.clear())
+          .then(this.$router.go())
     }
-  }
+  },
+    computed: {
+        isLogin(){
+            return this.$store.getters.isLogin
+        }
+    }
 };
 </script>
